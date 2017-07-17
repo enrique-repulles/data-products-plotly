@@ -1,0 +1,72 @@
+---
+title: "Vehicle classification in Barcelona"
+author: "Enrique Repullés"
+date: "July 17, 2017"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(reshape2)
+library(ggplot2)
+library(plotly)
+library(dplyr)
+```
+
+## Introduction
+
+July 17, 2017
+
+In the city of Barcelona, the town hall publishes a web page with a lot of data sources about the city. The web page is: [http://opendata-ajuntament.barcelona.cat/en/]
+
+I've selected a data source about types of vehicles registered by district.
+
+The source of this document can be found at [https://github.com/enrique-repulles/data-products-plotly] 
+
+
+```{r data loading, echo = FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+url <- "http://opendata-ajuntament.barcelona.cat/data/dataset/33964d4e-4b74-4a40-8ed2-3c1a0497659f/resource/ea9a284c-b224-458b-816f-44e85e801641/download/tipo2016.csv"
+
+columns<-c("district","quarter","total","private.car","motorcycle","moped","van","truck","other")
+
+df <- read.csv(url, col.names = columns)
+
+```
+
+```{r data cleaning, echo = FALSE, message=FALSE, warning=FALSE}
+df.clean <- df[df$district!="BARCELONA",]
+
+df.privatecar <-aggregate(private.car ~ district  ,data = df.clean , sum)
+df.motorcycle <-aggregate(motorcycle ~ district  ,data = df.clean , sum)
+df.moped <-aggregate(moped ~ district  ,data = df.clean , sum)
+df.van <-aggregate(van ~ district  ,data = df.clean , sum)
+df.truck <-aggregate(truck ~ district  ,data = df.clean , sum)
+df.other <-aggregate(other ~ district  ,data = df.clean , sum)
+
+df.final<-inner_join(df.privatecar, df.motorcycle)
+df.final<-inner_join(df.moped ,df.final)
+df.final<-inner_join(df.van  ,df.final)
+df.final<-inner_join(df.truck  ,df.final)
+df.final<-inner_join(df.other  ,df.final)
+
+df.final$district<-factor(df.final$district, levels = c("1","2","3","4","5","6","7","8","9","10"),labels = c("Ciutat Vella","Eixample","Sants-Montjuïc","Les Corts","Sarrià-Sant Gervasi","Gràcia","Horta-Guinardó","Nou Barris","Sant Andreu","Sant Martí"))
+
+```
+
+
+## Vehicle type classification
+
+Number of vehicles by vehicle type and district.
+
+```{r plot,message=FALSE, warning=FALSE, fig.height=3}
+
+plot_ly(df.final, x = ~district, y = ~private.car, type = 'bar', name = 'Private car') %>%
+  add_trace(y = ~motorcycle, name = 'Motorcycle') %>%
+  add_trace(y = ~moped ,df.final, name = 'Moped') %>%
+  add_trace(y = ~van  ,df.final, name = 'Van') %>%
+  add_trace(y = ~truck  ,df.final, name = 'Truck') %>%
+  add_trace(y = ~other  ,df.final, name = 'Other') %>%
+  layout(yaxis = list(title = 'Count'), barmode = 'stack')
+
+```
+
