@@ -1,0 +1,10 @@
+http://opendata-ajuntament.barcelona.cat/data/en/dataset/tipologia-tipo
+
+
+http://opendata-ajuntament.barcelona.cat/data/dataset/33964d4e-4b74-4a40-8ed2-3c1a0497659f/resource/ea9a284c-b224-458b-816f-44e85e801641/download/tipo2016.csv
+http://opendata-ajuntament.barcelona.cat/resources/opendata/2015_tipologia-tipo2015.csv
+http://opendata-ajuntament.barcelona.cat/resources/opendata/2014_tipologia-tipo.csv
+http://opendata-ajuntament.barcelona.cat/resources/opendata/2013_tipologiatipo2013.csv
+http://opendata-ajuntament.barcelona.cat/resources/opendata/2012_tipologiatipo2012.csv
+http://opendata-ajuntament.barcelona.cat/resources/opendata/tipologiatipo2011.csv
+http://opendata-ajuntament.barcelona.cat/resources/opendata/tipologiatipo2010.csv
